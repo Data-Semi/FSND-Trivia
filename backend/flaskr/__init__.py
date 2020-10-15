@@ -2,31 +2,40 @@ import os
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-import random
+#import randomy
 
 from models import setup_db, Question, Category
-
+#wendy--cors setting
+from flask_cors import CORS
+app = Flask(__name__)
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 QUESTIONS_PER_PAGE = 10
 
 def create_app(test_config=None):
   # create and configure the app
   app = Flask(__name__)
   setup_db(app)
-  
-  '''
-  @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
-  '''
 
-  '''
-  @TODO: Use the after_request decorator to set Access-Control-Allow
-  '''
-
+# CORS Headers 
+@app.after_request
+def after_request(response):
+  response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
+  response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+  return response
   '''
   @TODO: 
   Create an endpoint to handle GET requests 
   for all available categories.
   '''
-
+@app.route('/categories')
+def retrieve_categories():
+  selection = Category.query.order_by(Category.id).all()
+  if len(selection) == 0:
+    abort(404)
+  return jsonify({
+    'success': True,
+    'categories': selection,
+  })
 
   '''
   @TODO: 
