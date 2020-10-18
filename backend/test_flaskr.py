@@ -23,8 +23,8 @@ class TriviaTestCase(unittest.TestCase):
             'difficulty':1,
             'category':'2'
         }
-        self.quiz = {'previous_questions':[10, 11],
-                     'quiz_category':{'type': 'Science', 'id': '1'}
+        self.quiz = {'previous_questions':[16, 17],
+                     'quiz_category':{'type': 'Art', 'id': '2'}
                      }
 
         # binds the app to the current context
@@ -38,10 +38,6 @@ class TriviaTestCase(unittest.TestCase):
         """Executed after reach test"""
         pass
 
-    """
-    TODO
-    Write at least one test for each test for successful operation and for expected errors.
-    """
     def test_get_paginated_questions(self):
         res = self.client().get('/questions')
         data = json.loads(res.data)
@@ -105,7 +101,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(len(data['questions']),2)
     
     def test_get_question_search_without_result(self):
-        res = self.client().post('/questions', json={'search':'kkkkkabcdefg'})
+        res = self.client().post('/questions', json={'searchTerm':'kkkkkabcdefg'})
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
